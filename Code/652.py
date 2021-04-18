@@ -14,7 +14,7 @@ class Solution:
 
         def collect(node):
             if not node: return "#"
-            serial = "{},{},{}".format(node, collect(node.left), collect(node.right))
+            serial = "{},{},{}".format(node.val, collect(node.left), collect(node.right))
             count[serial] += 1
             if count[serial] == 2:
                 ans.append(node)
