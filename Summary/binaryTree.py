@@ -63,9 +63,30 @@ def minDepth2(root):
     return 0
 
 """
-112. 路径总和 - 判断是否等于targetSum的路径
+112. 路径总和 - 判断是否等于sum的路径
 """
-def hasPathSum(root, targetSum):
+def hasPathSum1(root, sum):
+    """dfs + 递归"""
+    if not root: return False
+    if not root.left and not root.right:
+        return root.val == sum
+    return hasPathSum1(root.left, sum-root.val) or hasPathSum1(root.right, sum-root.val)
+
+
+def hasPathSum2(root, sum):
+    """bfs"""
+    if not root: return False
+    queue = collections.deque()
+    queue.append((root, root.val))
+    while queue:
+        node, path = queue.popleft()
+        if not node.left and not node.right and path == sum:
+            return True
+        if node.left:
+            queue.append((node.left, path + node.left.val))
+        if node.right:
+            queue.append((node.right, path + node.right.val))
+    return False
 
 
 """
@@ -101,10 +122,6 @@ def isSymmetric2(root):
         queue.append((left.right, right.left))
     return True
 
-
-
-
-
 """                               
 #测试用例1                                
 
@@ -129,7 +146,7 @@ ans = minDepth2(f)
 print("minDepth: ", ans)
 """
 
-"""
+
 #测试用例2：对称二叉树
 
 d = TreeNode(3)
@@ -144,4 +161,8 @@ ans = isSymmetric1(a)
 print("is symmetric: ", ans)
 ans = isSymmetric2(a)
 print("is symmetric: ",ans)
-"""
+ans = hasPathSum1(a, sum=7)
+print("has path sum: ", ans)
+ans = hasPathSum2(a, sum=7)
+print("has path sum: ", ans)
+
