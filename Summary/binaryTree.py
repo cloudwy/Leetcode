@@ -88,6 +88,42 @@ def hasPathSum2(root, sum):
             queue.append((node.right, path + node.right.val))
     return False
 
+def hasPathSum3(root, sum):
+    def traverse(node):
+        """遍历所有路径和"""
+        if not node:
+            return []
+        if not node.left and not node.right:
+            return [node.val]
+        left, right = [], []
+        if node.left:
+            left = [node.val + x for x in traverse(node.left)]
+        if node.right:
+            right = [node.val + x for x in traverse(node.right)]
+        return left + right
+
+    if sum in traverse(root): return True
+    else: return False
+
+"""
+113. 路径总和 II - 找出路径总和等于sum的路径
+"""
+def pathSum(root, sum):
+    """dfs"""
+    ans = []  #记录最后结果
+    path = []  #记录每条路径
+    def dfs(root, total):
+        if not root: return
+        path.append(root.val)
+        total -= root.val
+        if not root.left and not root.right and total==0:
+            ans.append(path[:])
+        dfs(root.left, total)
+        dfs(root.right, total)
+        path.pop()
+    dfs(root, sum)
+    return ans
+
 
 """
 101. 对称二叉树
@@ -165,4 +201,24 @@ ans = hasPathSum1(a, sum=7)
 print("has path sum: ", ans)
 ans = hasPathSum2(a, sum=7)
 print("has path sum: ", ans)
+ans = pathSum(a, 6)
+print(ans)
 
+
+"""
+#测试用例3
+a = TreeNode(7)
+b = TreeNode(2)
+c = TreeNode(11, left=a, right=b)
+d = TreeNode(4, left=c)
+e = TreeNode(13)
+f = TreeNode(1)
+g = TreeNode(4, right=f)
+h = TreeNode(8, left=e, right=g)
+i = TreeNode(5, left=d, right=h)
+
+ans = hasPathSum3(i, 22)
+print(ans)
+ans = pathSum(i, 22)
+print(ans)
+"""
